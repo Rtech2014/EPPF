@@ -15,7 +15,7 @@ var volume;
 var board = new five.Board();
 var TestObject1 = Parse.Object.extend("DAMData1");
 var testObject1 = new TestObject1();
-var TestObject1 = Parse.Object.extend("DAMData2");
+var TestObject2 = Parse.Object.extend("DAMData2");
 var testObject2 = new TestObject2();
 
 
@@ -77,8 +77,8 @@ board.on("ready", function() {
               flowSignal(value);
             });
 
-            // Set how often to Emit data to Plotly
             setInterval(function() {
+              // Set how often to Emit data to Plotly
               var litres = pulses;
               litres = litres * 60/7.5;
               litres = litres / 60;
@@ -90,6 +90,10 @@ board.on("ready", function() {
               pulses = 0;
             }, 1000);
 });
+
+
+
+
 
 
 function flowSignal (value) {
@@ -137,35 +141,36 @@ console.log(predctncff);
 });
 
 
+
+
+
 if (predctncff>=threshold)
 {
-  var dischargewater=tdl-threshold;
-  var dischargewaterps=dischargewater/300;
-  var query = new Parse.Query(testObject1);
-  query.descending("createdAt");
-  query.limit(1);
-  query.include("post");
-  query.find({
-  success: function(testObject1) {
-      var post = testObject2[0].get("predctncff");
-      var post1 = testObject2[0].get("threshold");
-      var nxtdmpdcff=post;
-      var nxtdmtv = post1;
-    console.log(nxtdmpdcff);
-    console.log(nxtdmtv);
-    if(nxtdmpdcff + dw > nxtdmtv)
-    {
-    testObject2.set("token", "1");
-    testObject2.set("tokenv",dw);
-    }
-    else {
-      realse();
-    }
-  }
-});
-
+          var dischargewater=tdl-threshold;
+          var dischargewaterps=dischargewater/300;
+          var query = new Parse.Query(testObject1);
+          query.descending("createdAt");
+          query.limit(1);
+          query.include("post");
+          query.find({
+          success: function(testObject1) {
+              var post = testObject2[0].get("predctncff");
+              var post1 = testObject2[0].get("threshold");
+              var nxtdmpdcff=post;
+              var nxtdmtv = post1;
+            console.log(nxtdmpdcff);
+            console.log(nxtdmtv);
+            if(nxtdmpdcff + dw > nxtdmtv)
+            {
+            testObject2.set("token", "1");
+            testObject2.set("tokenv",dw);
+            }
+            else {
+              realse();
+            }
+          }
+        });
 }
-
 
 var query = new Parse.Query(testObject1);
 query.descending("createdAt");
@@ -180,37 +185,36 @@ success: function(testObject1) {
 
 if(tkn==1)
 {
-  if (tknvl+predctncff>threshold)
-  {
-    dw=tknvl+Waterlevel;
-    var dw=tdl-threshold;
-    var dws=dw/300;
-    var query = new Parse.Query(testObject1);
-    query.descending("createdAt");
-    query.limit(1);
-    query.include("post");
-    query.find({
-    success: function(testObject1) {
-        var post = testObject2[0].get("predctncff");
-        var post1 = testObject2[0].get("threshold");
-        var nxtdmpdcff=post;
-        var nxtdmtv = post1;
-      console.log(nxtdmpdcff);
-      console.log(nxtdmtv);
-      if(nxtdmpdcff + dw > nxtdmtv)
-      {
-      testObject2.set("token", "1");
-      testObject2.set("tokenv",dw);
-      }
-      else {
-        realse();
-      }
-    }
-  });
+          if (tknvl+predctncff>threshold)
+          {
+                    dw=tknvl+Waterlevel;
+                    var dw=tdl-threshold;
+                    var dws=dw/300;
+                    var query = new Parse.Query(testObject1);
+                    query.descending("createdAt");
+                    query.limit(1);
+                    query.include("post");
+                    query.find({
+                    success: function(testObject1) {
+                        var post = testObject2[0].get("predctncff");
+                        var post1 = testObject2[0].get("threshold");
+                        var nxtdmpdcff=post;
+                        var nxtdmtv = post1;
+                      console.log(nxtdmpdcff);
+                      console.log(nxtdmtv);
+                      if(nxtdmpdcff + dw > nxtdmtv)
+                      {
+                      testObject2.set("token", "1");
+                      testObject2.set("tokenv",dw);
+                      }
+                      else {
+                        realse();
+                      }
+                    }
+                  });
 
   }
-
-
+  }
 }
-
- }
+});
+}
