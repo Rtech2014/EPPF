@@ -103,10 +103,6 @@ function flowSignal (value) {
 
 
 
-
-
-
-
 function pred(){
 
 volume=l*w*(h-waterlevel/100);
@@ -136,7 +132,7 @@ console.log(predctncff);
   }
 });
 
-
+console.log("Manan engum aval nyabagam");
 if (predctncff>=threshold)
 {
   var dischargewater=tdl-threshold;
