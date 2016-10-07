@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="AuthApp">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-route.js"></script>
+
+<script src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+<!-- start: CSS -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script type="text/javascript" src="js/signuplogintoggle.js" charset="utf-8"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<link  href="css/style.css" rel="stylesheet">
+<link  href="css/sidebarnav.css" rel="stylesheet">
+
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+<!-- end: CSS -->
+
+<meta charset=utf-8 />
+<title>EPPF</title>
+</head>
+<body>
+  <div class="main-container">
+    <div ng-hide="currentUser">
+
+      <form ng-show="scenario == 'Sign up'"  class="form-signin" role="form">
+
+        <h2 class="form-signin-heading text-center">EPPF</h2>
+        Email: <input type="email" ng-model="user.email" class="form-control" /><br />
+        Username: <input type="text" ng-model="user.username" class="form-control" /><br />
+        Password: <input type="password" ng-model="user.password"  class="form-control"/><br />
+        <button ng-click="signUp(user)" class="btn btn-lg btn-primary btn-block">Sign up</button>
+        </br>
+        <a href="#" ng-click='scenario="Log in"'><p class="text-center">Login</p></a>
+      </div>
+      </form>
+
+    <form ng-show="scenario == 'Log in'" class="form-signin" role="form">
+      <h2 class="form-signin-heading">Please sign in</h2>
+
+      Username: <input type="text" ng-model="user.username" class="form-control" role="form"/><br />
+      Password: <input type="password" ng-model="user.password" class="form-control" role="form" /><br />
+      <button ng-click="logIn(user)" class="btn btn-lg btn-primary btn-block">Log in</button>
+    </br>
+     <a href="#" ng-click='scenario="Sign up"'><p class="text-center">Sign up</p></a>
+    </form>
+  </div>
+
+  <div ng-show="currentUser">
+
+        <div id="wrapper">
+              <div class="container">
+                  <div class="menu">
+                    <header ng-include="'partials/nav.html'">
+                    </header>
+                    <div class="jumbotron" ui-view>
+                    </div>
+                    <footer ng-include="'partials/footer.html'">
+                    </footer>
+                  </div>
+                  <button ng-click="logOut(user)" class="logout">Log out</button>
+                </div>
+        </div>
+
+
+    </div>
+
+
+  </div>
+  <script type="text/javascript">
+      Parse.initialize("34olOarYIJtsSy1YcuCdR4RFBPzKthQfAyotWjXP", "vvoqLVt7kMDwuxYliMuOJthEpMvRA3PVFdxC5izY");
+
+      angular.module('AuthApp', [])
+      .run(['$rootScope', function($scope) {
+      $scope.scenario = 'Sign up';
+      $scope.currentUser = Parse.User.current();
+
+      $scope.signUp = function(form) {
+        var user = new Parse.User();
+        user.set("email", form.email);
+        user.set("username", form.username);
+        user.set("password", form.password);
+
+        user.signUp(null, {
+          success: function(user) {
+            $scope.currentUser = user;
+            $scope.$apply();
+          },
+          error: function(user, error) {
+            alert("Unable to sign up:  " + error.code + " " + error.message);
+          }
+        });
+      };
+
+      $scope.logIn = function(form) {
+        Parse.User.logIn(form.username, form.password, {
+          success: function(user) {
+            $scope.currentUser = user;
+            $scope.$apply();
+          },
+          error: function(user, error) {
+            alert("Unable to log in: " + error.code + " " + error.message);
+          }
+        });
+      };
+
+      $scope.logOut = function(form) {
+        Parse.User.logOut();
+        $scope.currentUser = null;
+      };
+      }]);
+
+  </script>
+</body>
+</html>
